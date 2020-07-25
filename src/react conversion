@@ -1,0 +1,54 @@
+react conversion
+bootstrap
+ajouter de la pub
+deployer
+SEO
+google ads
+bombarder de traffic
+
+chaine youtube de musique => voir https://www.youtube.com/watch?v=ZKRL8zMP28A, music copyright, compilate and take an image
+mettre en place toute les solutions de investor
+blog sur le trading => chopper un blog americain et traduire, générer du traffic avec SniperTrader
+site revente de formation
+deep learning poker pluribus
+pornhub amateur programme
+
+
+Samedi:
+
+finir react 101 --> DONE
+sport ( footing + tractions ) --> DONE
+convertir l'app en react 
+faire cv quebecois
+
+
+
+Dimanche:
+
+finir react 102
+finir Boostrap 101
+Convertir app Bootstrap
+Deployer l'app en production (CloudFront + s3 + API GateWay + lambda), full serverless
+préparer l'agenda de la semaine
+
+lambda pour curl youtube search
+finir le front en bootstrap
+traduire et lancer
+
+
+https://wb7077w2zc.execute-api.us-east-1.amazonaws.com/dev?videoId=JhfCH5dESw0&type=audio
+
+
+
+curl "https://www.youtube.com/results?sp=CAISAhgC&search_query=dmx&max_results=9" 2>&1 | grep -oP "watch\?v=[\w-]{10,
+}" | sort | uniq
+
+
+dans l'ordre:
+
+dl en un clic
+s'affranchir de l'API youtube pour search
+dl en stream
+
+
+s=AOAOq0QJ8wRAIgfOAdkx2QkVrECL5eF7O4KgQPjV6iOu7YLM5gGOxqrq8CIHtat-KSMl6TjeuQn46TtDhG0mt1VYckHUMXH5NMBVHY_&sp=sig&url=https://r5---sn-t0a7sn7d.googlevideo.com/videoplayback%3Fexpire%3D1593480700%26ei%3DnEH6XtivKIi78gSk1pqICA%26ip%3D54.161.169.82%26id%3Do-AHN_dwMmAFs_RIwYspU9-9XOOOoEPYkQ1lqG7c6EHzFj%26itag%3D251%26source%3Dyoutube%26requiressl%3Dyes%26mh%3DID%26mm%3D31%252C26%26mn%3Dsn-t0a7sn7d%252Csn-vgqsknek%26ms%3Dau%252Conr%26mv%3Du%26mvi%3D4%26pl%3D24%26vprv%3D1%26mime%3Daudio%252Fwebm%26gir%3Dyes%26clen%3D3569951%26dur%3D222.321%26lmt%3D1576001586024868%26mt%3D1593458722%26fvip%3D5%26keepalive%3Dyes%26c%3DWEB%26txp%3D5531432%26sparams%3Dexpire%252Cei%252Cip%252Cid%252Citag%252Csource%252Crequiressl%252Cvprv%252Cmime%252Cgir%252Cclen%252Cdur%252Clmt%26lsparams%3Dmh%252Cmm%252Cmn%252Cms%252Cmv%252Cmvi%252Cpl%26lsig%3DAG3C_xAwRQIgUChABrwyRp1snwXDY1izTACeIEhU-587E9p6f_2jHaUCIQDsSt512e5sWVSXO4uXYGDjoGybfmyFid0LfMwYHWZziQ%253D%253

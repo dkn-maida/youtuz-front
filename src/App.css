@@ -1,0 +1,50 @@
+.title {
+	font-size: 3vw;
+}
+
+.btnAudio {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btnVideo {
+  background-color: #00CED1;
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+}
+
+.header{
+	background-color: #f8f8f8;
+  top: 0;
+  width: 100%;
+  height: 10%;
+} 
+
+.footer{
+  background-color: #f8f8f8;
+  bottom: 0;
+  width: 100%;
+  height: 10%;
+}
+
+
+.copyright{
+  font-weight: 600;
+  letter-spacing: 2px;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #939393;
+}
+
+.logo{
+  font-family: 'Nova Square', cursive; 
+}
+
+.text-responsive {
+  font-size: calc(100% + 1vw + 1vh);
+}
