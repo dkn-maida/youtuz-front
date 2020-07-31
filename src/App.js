@@ -57,17 +57,11 @@ class App extends React.Component{
 		})
 	}
 
-	_download(id, type){
+	_download(id, type, title){
 		let params = {type: type, videoId: id}
 		let url=this.url_dl + '?' +new URLSearchParams(params).toString();
-		fetch(this.url_dl+'?type='+type+'&videoId='+id)
-		.then(response => {response.text().then(text => {
-			var elem = document.createElement('a');
-		    elem.href = text;
-		    elem.target = '#'
-		    elem.download=''
-		    elem.click();
-		})})
+		fetch(this.url_dl+'?type='+type+'&videoId='+id+'&title='+title)
+		.then(response => {response.text().then(text => {console.log(response)})})
 	}
 
 	render(){
@@ -91,8 +85,8 @@ class App extends React.Component{
 									<img className="img-fluid" src={result.thumb} alt={result.title}></img>
 									<span className="mt-2">{result.title}</span> 
 								</div>
-								<button type="submit" className="btnAudio mt-1 btn-lg btn-primary"  onClick={() => this._download(result.id, "audio")}><i className="fa fa-download"></i> Audio</button>
-								<button type="button" className="btnVideo mt-1 btn-lg btn-info" onClick={() => this._download(result.id, "video")}><i className="fa fa-download"></i> Video</button>
+								<button type="submit" className="btnAudio mt-1 btn-lg btn-primary"  onClick={() => this._download(result.id, "audio",  result.title)}><i className="fa fa-download"></i> Audio</button>
+								<button type="button" className="btnVideo mt-1 btn-lg btn-info" onClick={() => this._download(result.id, "video", result.title)}><i className="fa fa-download"></i> Video</button>
 							</div>
 						))}
 					</div>
@@ -103,8 +97,8 @@ class App extends React.Component{
 									<img className="img-fluid" src={result.thumb} alt={result.title}></img>
 									<span className="mt-2">{result.title}</span>
 								</div>
-								<button type="button" className="btnAudio mt-1 btn-lg  btn-primary" onClick={() => this._download(result.id, "audio")}><i className="fa fa-download"></i> Audio</button>
-								<button type="button" className="btnVideo mt-1 btn-lg  btn-info" onClick={() => this._download(result.id, "video")}><i className="fa fa-download"></i> Video</button>
+								<button type="button" className="btnAudio mt-1 btn-lg  btn-primary" onClick={() => this._download(result.id, "audio",  result.title)}><i className="fa fa-download"></i> Audio</button>
+								<button type="button" className="btnVideo mt-1 btn-lg  btn-info" onClick={() => this._download(result.id, "video",  result.title)}><i className="fa fa-download"></i> Video</button>
 							</div>
 						))}
 					</div>
@@ -115,8 +109,8 @@ class App extends React.Component{
 									<img className="img-fluid" src={result.thumb} alt={result.title}></img>
 									<span className="mt-2">{result.title}</span>
 								</div>
-								<button type="button" className="btnAudio mt-1 btn-lg  btn-primary" onClick={() => this._download(result.id, "audio")}><i className="fa fa-download"></i> Audio</button>
-								<button type="button" className="btnVideo mt-1 btn-lg  btn-info" onClick={() => this._download(result.id, "video")}><i className="fa fa-download"></i> Video</button>
+								<button type="button" className="btnAudio mt-1 btn-lg  btn-primary" onClick={() => this._download(result.id, "audio", result.title)}><i className="fa fa-download"></i> Audio</button>
+								<button type="button" className="btnVideo mt-1 btn-lg  btn-info" onClick={() => this._download(result.id, "video",  result.title)}><i className="fa fa-download"></i> Video</button>
 							</div>
 						))}
 					</div>
