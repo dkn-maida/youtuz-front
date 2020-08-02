@@ -1,23 +1,24 @@
 import React from 'react';
 import jsonp from 'jsonp-modernized';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import Popup from "reactjs-popup";
+import { Spinner } from 'react-bootstrap';
+import { ResItem } from  './ResItem'
 const entities= require('entities');
 
 class App extends React.Component{
 
 	constructor(props){
 		super(props)
+
 		this.url_search='https://2s53ok0gah.execute-api.us-east-1.amazonaws.com/dev/search'
-		this.url_dl='https://2s53ok0gah.execute-api.us-east-1.amazonaws.com/dev/dl'
 		this.state={
 			results: [],
 			suggestions: [],
-			isLoading: false
+			isLoading: false,
+			isSearchLoading: false
 		}
 		this._autoComplete = this._autoComplete.bind(this);
 		this._search = this._search.bind(this);
-		this._download = this._download.bind(this);
 		this.aheadRef = React.createRef();
 	}
 
@@ -47,23 +48,20 @@ class App extends React.Component{
 	{	
 		console.log(this.aheadRef)
 		var input=this.aheadRef.current.getInput().value
+		if ( input === '' || input === null ) return;
 		var search_url=this.url_search +'?query='+input
 		var ref=this
+		ref.setState({isSearchLoading: true}) 
 		fetch(search_url)
 		.then(response => response.json())
 		.then(data => {
 			console.log(data)
 			ref.setState({results: data})
+			ref.setState({isSearchLoading: false})
 		})
+		.catch(err => console.log(err))
 	}
-
-	_download(id, type, title){
-		let params = {type: type, videoId: id}
-		let url=this.url_dl + '?' +new URLSearchParams(params).toString();
-		fetch(this.url_dl+'?type='+type+'&videoId='+id+'&title='+title)
-		.then(response => {response.text().then(text => {console.log(response)})})
-	}
-
+ 
 	render(){
 		return(
 			<div id="app" className="container">
@@ -77,44 +75,22 @@ class App extends React.Component{
 						<button type="button" className="tbn btn-primary btn-block mt-1 btn-lg" onClick={this._search}>Search</button>
 		       		</div>
 				</div>
-				<div className="container-fluid">
-					<div className="card-deck p-3 text-center">
-						{this.state.results.slice(0, 3).map(result => (
-							<div className="card border-0" key={result.id}> 
-								<div className="card-body p-0">
-									<img className="img-fluid" src={result.thumb} alt={result.title}></img>
-									<span className="mt-2">{result.title}</span> 
-								</div>
-								<button type="submit" className="btnAudio mt-1 btn-lg btn-primary"  onClick={() => this._download(result.id, "audio",  result.title)}><i className="fa fa-download"></i> Audio</button>
-								<button type="button" className="btnVideo mt-1 btn-lg btn-info" onClick={() => this._download(result.id, "video", result.title)}><i className="fa fa-download"></i> Video</button>
-							</div>
-						))}
-					</div>
-					<div className="card-deck p-3 text-center">
-						{this.state.results.slice(3, 6).map(result => (
-							<div className="card  border-0" key={result.id}>
-								<div className="card-body p-0"> 
-									<img className="img-fluid" src={result.thumb} alt={result.title}></img>
-									<span className="mt-2">{result.title}</span>
-								</div>
-								<button type="button" className="btnAudio mt-1 btn-lg  btn-primary" onClick={() => this._download(result.id, "audio",  result.title)}><i className="fa fa-download"></i> Audio</button>
-								<button type="button" className="btnVideo mt-1 btn-lg  btn-info" onClick={() => this._download(result.id, "video",  result.title)}><i className="fa fa-download"></i> Video</button>
-							</div>
-						))}
-					</div>
-					<div className="card-deck p-3 text-center">
-						{this.state.results.slice(6, 9).map(result => (
-							<div className="card  border-0" key={result.id}> 
-								<div className="card-body p-0">
-									<img className="img-fluid" src={result.thumb} alt={result.title}></img>
-									<span className="mt-2">{result.title}</span>
-								</div>
-								<button type="button" className="btnAudio mt-1 btn-lg  btn-primary" onClick={() => this._download(result.id, "audio", result.title)}><i className="fa fa-download"></i> Audio</button>
-								<button type="button" className="btnVideo mt-1 btn-lg  btn-info" onClick={() => this._download(result.id, "video",  result.title)}><i className="fa fa-download"></i> Video</button>
-							</div>
-						))}
-					</div>
-				</div>
+
+				{ 
+				
+				this.state.isSearchLoading ? 
+				(<div className="row justify-content-center">
+					<Spinner animation="border" variant="primary"  role="status" style={{width: '3rem', height: '3rem'}} >
+						<span className="sr-only">Loading...</span>	
+					</Spinner>
+				</div>):
+				(<div className="container-fluid">
+					<ResItem results={this.state.results.slice(0, 3)} />
+					<ResItem results={this.state.results.slice(3, 6)} />
+					<ResItem results={this.state.results.slice(6, 9)} />
+				</div>)
+				}
+
 			</div>
 
 		)
