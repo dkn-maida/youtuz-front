@@ -35,8 +35,9 @@ class ResItem extends React.Component{
                 method: 'GET',
                 responseType: 'blob'
               }).then((response) => {
-                let urlfake = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
+                title=(type == 'video')?title+'.mp4':title+'.mp3'
+                let urlfake = window.URL.createObjectURL(new File([response.data], title));
+                const link = document.createElement('a'); 
                 link.href = urlfake;
                 link.setAttribute('download', title); 
                 link.click();
