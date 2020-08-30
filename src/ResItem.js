@@ -1,15 +1,16 @@
 import React from 'react';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class ResItem extends React.Component{
 
 	constructor(props){
         super(props)
-        this.url_dl='http://localhost:4000/download'
-        this.url_gf='http://localhost:4000/files'
-        this._download = this._download.bind(this);
-        console.log(props)
+        
 	}
+
+  _buildUrl(videoId, thumb, title, type){
+    return "/download?videoId="+videoId+"&thumb="+thumb+"&title="+title+"&type="+type
+  }
 
 	render(){ 
 
@@ -21,29 +22,20 @@ class ResItem extends React.Component{
 									<img className="img-fluid" src={result.thumb} alt={result.title}></img>
 									<span className="mt-2">{result.title}</span> 
 								</div>
-								<button type="submit" className="btnAudio mt-1 btn-lg btn-primary"  onClick={() => this._download(result.id, "audio",  result.title)}><i className="fa fa-download"></i> Audio</button>
-								<button type="button" className="btnVideo mt-1 btn-lg btn-info" onClick={() => this._download(result.id, "video", result.title)}><i className="fa fa-download"></i> Video</button>
+                <Link to={this._buildUrl(result.id, result.thumb, result.title, 'audio')}>
+                  <button type="button" className="btnAudio mt-1 btn-lg btn-primary"><i className="fa fa-download"></i> Audio</button>
+                </Link>
+                <Link to={this._buildUrl(result.id, result.thumb, result.title, 'video')}>
+                  <button type="button" className="btnVideo mt-1 btn-lg btn-primary"><i className="fa fa-download"></i> Video</button>
+                </Link>
+								{/* <button type="button" className="btnAudio mt-1 btn-lg btn-primary"  onClick={() => this._download(result.id, "audio",  result.title)}><i className="fa fa-download"></i> Audio</button>
+								<button type="button" className="btnVideo mt-1 btn-lg btn-info" onClick={() => this._download(result.id, "video", result.title)}><i className="fa fa-download"></i> Video</button> */}
 							</div>
 						))}
 			</div>
-        )}
+    )}
 
-        _download(id, type, title){       
-            var url=this.url_dl+'?type='+type+'&videoId='+id+'&title='+title
-            console.log("trying to fetch " + url)
-            axios({
-                url: url,
-                method: 'GET',
-                responseType: 'blob'
-              }).then((response) => {
-                title=(type === 'video')?title+'.mp4':title+'.mp3'
-                let urlfake = window.URL.createObjectURL(new File([response.data], title));
-                const link = document.createElement('a'); 
-                link.href = urlfake;
-                link.setAttribute('download', title); 
-                link.click();
-             }).catch(err => console.log(err));
-        }
+      
  } 
   
 export { ResItem };

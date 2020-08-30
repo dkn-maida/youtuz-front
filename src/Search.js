@@ -5,7 +5,7 @@ import { Spinner } from 'react-bootstrap';
 import { ResItem } from  './ResItem'
 const entities= require('entities');
 
-class App extends React.Component{
+class Search extends React.Component{
 
 	constructor(props){
 		super(props)
@@ -98,4 +98,4 @@ class App extends React.Component{
 	}
 }
 
-export { App };
+export { Search };
