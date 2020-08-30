@@ -8,6 +8,7 @@ class ResItem extends React.Component{
         this.url_dl='http://localhost:4000/download'
         this.url_gf='http://localhost:4000/files'
         this._download = this._download.bind(this);
+        console.log(props)
 	}
 
 	render(){ 
@@ -35,7 +36,7 @@ class ResItem extends React.Component{
                 method: 'GET',
                 responseType: 'blob'
               }).then((response) => {
-                title=(type == 'video')?title+'.mp4':title+'.mp3'
+                title=(type === 'video')?title+'.mp4':title+'.mp3'
                 let urlfake = window.URL.createObjectURL(new File([response.data], title));
                 const link = document.createElement('a'); 
                 link.href = urlfake;

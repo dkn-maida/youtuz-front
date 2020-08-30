@@ -10,7 +10,7 @@ class App extends React.Component{
 	constructor(props){
 		super(props)
 
-		this.url_search='https://2s53ok0gah.execute-api.us-east-1.amazonaws.com/dev/search'
+		this.url_search='http://localhost:4000/search'
 		this.state={
 			results: [],
 			suggestions: [],
@@ -57,6 +57,7 @@ class App extends React.Component{
 		.then(data => {
 			console.log(data)
 			ref.setState({results: data})
+			console.log(ref)
 			ref.setState({isSearchLoading: false})
 		})
 		.catch(err => console.log(err))
