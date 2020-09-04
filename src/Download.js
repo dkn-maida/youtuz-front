@@ -6,6 +6,7 @@ class Download extends React.Component{
 	constructor(props){
 		super(props)
 		this.url_dl='http://localhost:4000/download'
+		this.url_dl_size='http://localhost:4000/downloadSize'
 		this.videoId=new URLSearchParams(window.location.search).get("videoId")
 		this.thumb=new URLSearchParams(window.location.search).get("thumb")
 		this.title=new URLSearchParams(window.location.search).get("title")
@@ -21,18 +22,27 @@ class Download extends React.Component{
 
 	_download(id, type, title){ 
 		var url=this.url_dl+'?type='+type+'&videoId='+id+'&title='+title
+		var url_size=this.url_dl_size+'?videoId='+id
+
 		console.log("trying to fetch " + url)
 		var ref=this
+		var size=0
+
+		axios({
+			url: url_size,
+			method: 'GET'
+		  }).then((response) => {
+			size=response.data
+		}).catch(err => console.log(err));
+
 		axios({
 			url: url,
 			method: 'GET',
 			responseType: 'blob',
 			onDownloadProgress(progressEvent) {
-				//console.log(progressEvent)
-				console.log(progressEvent.srcElement.response)
 				let progress = Math.round((progressEvent.loaded /10000) * 100);
-				console.log("progress="+progress)
-                ref.setState({progress : progress})
+				ref.setState({downloadProgress: Math.floor(progress/size*10000)})
+				console.log(ref.state.downloadProgress)
             }
 		  }).then((response) => {
 			title=(type === 'video')?title+'.mp4':title+'.mp3'
@@ -45,15 +55,17 @@ class Download extends React.Component{
 	}
 
 	render(){
-			return(<div>
-				<div>
-					<p>{this.title}</p>
-					<img src={this.thumb} alt={this.title} />
-				</div>
-				<div className="progress">
-  					<div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={this.state.downloadProgress} aria-valuemin="0" aria-valuemax="100">Extracting from youtube...</div>
-				</div>
-			</div>)
+			return(
+			<div className="container">
+					<h3 className="row justify-content-center text-responsive">{this.title}</h3>
+					<div className="row justify-content-center mt-4">
+						<img src={this.thumb} alt={this.title} className="img-fluid px-4 img-max" />
+					</div>
+					<div className="row mt-3 mx-1 progress mb-4"  style={{ height: "50px"}} >
+						<div  className="progress-bar progress-bar-striped progress-bar-animated text-responsive" style={{ width: this.state.downloadProgress+"%",height: "50px" }} role="progressbar" aria-valuenow={this.state.downloadProgress} aria-valuemin="0" aria-valuemax="100">Extracting from youtube...</div>
+					</div>
+			</div>
+			)
 	}
 }
 

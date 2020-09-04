@@ -69,26 +69,26 @@ class Search extends React.Component{
 				<div className="row justify-content-center mb-4">
 					<div className="col-11">
 						<div className="row justify-content-center"> 
-							<h1 className="mb-3 justify-content-center lead text-responsive">Download audio and video from Youtube</h1> 
+							<h1 className="text-center mb-3 lead text-responsive">Type Keywords to search for a video or paste a youtube url</h1> 
 						</div>
-						<AsyncTypeahead id="search_id" ref={this.aheadRef} onSearch={this._autoComplete} options={this.state.suggestions} minLength={1} 
-						placeholder="Search for a youtube video" isLoading={this.state.isLoading}  size="large"/>
-						<button type="button" className="tbn btn-primary btn-block mt-1 btn-lg" onClick={this._search}>Search</button>
+						<AsyncTypeahead  id="search_id" ref={this.aheadRef} onSearch={this._autoComplete} options={this.state.suggestions} minLength={1} 
+						 isLoading={this.state.isLoading}  size="large"/>
+						<button type="button" className="tbn btn-primary btn-block mt-1 btn-lg text-responsive" onClick={this._search}>Search</button>
 		       		</div>
 				</div>
 
 				{ 
-				
 				this.state.isSearchLoading ? 
 				(<div className="row justify-content-center">
 					<Spinner animation="border" variant="primary"  role="status" style={{width: '3rem', height: '3rem'}} >
-						<span className="sr-only">Loading...</span>	
+						<span className="sr-only text-responsive">Loading...</span>	
 					</Spinner>
 				</div>):
 				(<div className="container-fluid">
-					<ResItem results={this.state.results.slice(0, 3)} />
-					<ResItem results={this.state.results.slice(3, 6)} />
-					<ResItem results={this.state.results.slice(6, 9)} />
+					<ResItem results={this.state.results.slice(0, 4)} />
+					<ResItem results={this.state.results.slice(4, 8)} />
+					<ResItem results={this.state.results.slice(8, 12)} />
+					<ResItem results={this.state.results.slice(12, 16)}/> 
 				</div>)
 				}
 
