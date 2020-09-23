@@ -33,6 +33,7 @@ class Download extends React.Component{
 			method: 'GET'
 		  }).then((response) => {
 			size=response.data
+			console.log("Size=" + size)
 		}).catch(err => console.log(err));
 
 		axios({
@@ -40,7 +41,7 @@ class Download extends React.Component{
 			method: 'GET',
 			responseType: 'blob',
 			onDownloadProgress(progressEvent) {
-				let progress = Math.round((progressEvent.loaded /10000) * 100);
+				let progress = Math.round(progressEvent.loaded /100);
 				ref.setState({downloadProgress: Math.floor(progress/size*10000)})
 				console.log(ref.state.downloadProgress)
             }
@@ -49,20 +50,21 @@ class Download extends React.Component{
 			let urlfake = window.URL.createObjectURL(new File([response.data], title));
 			const link = document.createElement('a'); 
 			link.href = urlfake;
-			link.setAttribute('download', title); 
+			link.setAttribute('download', title);
+			link.setAttribute('target', '_blank'); 
 			link.click();
 		}).catch(err => console.log(err));
 	}
 
 	render(){
 			return(
-			<div className="container">
+			<div className="container-fluid">
 					<h3 className="row justify-content-center text-responsive">{this.title}</h3>
 					<div className="row justify-content-center mt-4">
-						<img src={this.thumb} alt={this.title} className="img-fluid px-4 img-max" />
+						<img src={this.thumb} alt={this.title} className="mx-auto w-50" />
 					</div>
-					<div className="row mt-3 mx-1 progress mb-4"  style={{ height: "50px"}} >
-						<div  className="progress-bar progress-bar-striped progress-bar-animated text-responsive" style={{ width: this.state.downloadProgress+"%",height: "50px" }} role="progressbar" aria-valuenow={this.state.downloadProgress} aria-valuemin="0" aria-valuemax="100">Extracting from youtube...</div>
+					<div className="row mt-3 mx-1 progress mb-4 w-50 mx-auto"  style={{ height: "25px"}} >
+						<div  className="progress-bar progress-bar-striped progress-bar-animated text-responsive" style={{ width: this.state.downloadProgress+"%",height: "25px" }} role="progressbar" aria-valuenow={this.state.downloadProgress} aria-valuemin="0" aria-valuemax="100"></div>
 					</div>
 			</div>
 			)
