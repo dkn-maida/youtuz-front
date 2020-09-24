@@ -6,13 +6,13 @@ class Download extends React.Component{
 	constructor(props){
 		super(props)
 		this.url_dl='http://localhost:4000/download'
-		this.url_dl_size='http://localhost:4000/downloadSize'
+		//this.url_dl_size='http://localhost:4000/downloadSize'
 		this.videoId=new URLSearchParams(window.location.search).get("videoId")
 		this.thumb=new URLSearchParams(window.location.search).get("thumb")
 		this.title=new URLSearchParams(window.location.search).get("title")
 		this.type=new URLSearchParams(window.location.search).get("type")
 		this._download= this._download.bind(this);
-		this.state= {downloadProgress: 0};
+		//this.state= {downloadProgress: 0};
 	}
 
 	componentDidMount() {
@@ -40,11 +40,11 @@ class Download extends React.Component{
 			url: url,
 			method: 'GET',
 			responseType: 'blob',
-			onDownloadProgress(progressEvent) {
-				let progress = Math.round(progressEvent.loaded /100);
-				ref.setState({downloadProgress: Math.floor(progress/size*10000)})
-				console.log(ref.state.downloadProgress)
-            }
+			// onDownloadProgress(progressEvent) {
+			// 	let progress = Math.round(progressEvent.loaded /100);
+			// 	ref.setState({downloadProgress: Math.floor(progress/size*10000)})
+			// 	console.log(ref.state.downloadProgress)
+            // }
 		  }).then((response) => {
 			title=(type === 'video')?title+'.mp4':title+'.mp3'
 			let urlfake = window.URL.createObjectURL(new File([response.data], title));
@@ -63,9 +63,9 @@ class Download extends React.Component{
 					<div className="row justify-content-center mt-4">
 						<img src={this.thumb} alt={this.title} className="mx-auto w-50" />
 					</div>
-					<div className="row mt-3 mx-1 progress mb-4 w-50 mx-auto"  style={{ height: "25px"}} >
+					{/* <div className="row mt-3 mx-1 progress mb-4 w-50 mx-auto"  style={{ height: "25px"}} >
 						<div  className="progress-bar progress-bar-striped progress-bar-animated text-responsive" style={{ width: this.state.downloadProgress+"%",height: "25px" }} role="progressbar" aria-valuenow={this.state.downloadProgress} aria-valuemin="0" aria-valuemax="100"></div>
-					</div>
+					</div> */}
 			</div>
 			)
 	}
