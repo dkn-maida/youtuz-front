@@ -80,7 +80,7 @@ class Search extends React.Component{
 				{ 
 				this.state.isSearchLoading ? 
 				(<div className="row justify-content-center">
-					<Spinner animation="border" variant="primary"  role="status" style={{width: '3rem', height: '3rem'}} >
+					<Spinner animation="border" variant="primary"  role="status" style={{width: '4rem', height: '4rem'}} >
 						<span className="sr-only text-responsive">Loading...</span>	
 					</Spinner>
 				</div>):

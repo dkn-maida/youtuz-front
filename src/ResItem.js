@@ -19,7 +19,7 @@ class ResItem extends React.Component{
 						{this.props.results.map(result => (
 							<div className="card border-0" key={result.id}> 
 								<div className="card-body p-0">
-									<img className="img-fluid width: 100%" src={result.thumb} alt={result.title}></img>
+									<img className="img-fluid w-100" src={result.thumb} alt={result.title}></img>
 									<span className="mt-2">{result.title}</span> 
 								</div>
 								<Link to={this._buildUrl(result.id, result.thumb, result.title, 'audio')}>

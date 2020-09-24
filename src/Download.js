@@ -13,6 +13,7 @@ class Download extends React.Component{
 		this.type=new URLSearchParams(window.location.search).get("type")
 		this._download= this._download.bind(this);
 		//this.state= {downloadProgress: 0};
+		//TO DO: add video size, quality, and duration
 	}
 
 	componentDidMount() {
@@ -60,12 +61,15 @@ class Download extends React.Component{
 			return(
 			<div className="container-fluid">
 					<h3 className="row justify-content-center text-responsive">{this.title}</h3>
-					<div className="row justify-content-center mt-4">
-						<img src={this.thumb} alt={this.title} className="mx-auto w-50" />
+					<div className="row justify-content-center mt-4 mb-4">
+						<img src={this.thumb} alt={this.title} className="mx-auto w-30 h-30" />
 					</div>
 					{/* <div className="row mt-3 mx-1 progress mb-4 w-50 mx-auto"  style={{ height: "25px"}} >
 						<div  className="progress-bar progress-bar-striped progress-bar-animated text-responsive" style={{ width: this.state.downloadProgress+"%",height: "25px" }} role="progressbar" aria-valuenow={this.state.downloadProgress} aria-valuemin="0" aria-valuemax="100"></div>
 					</div> */}
+					{/*  add spinner here*/}
+					{/*  add cancel button here*/}
+					{/*  add return button here*/}
 			</div>
 			)
 	}
