@@ -20,6 +20,7 @@
     "react-autosuggest": "^10.0.2",
     "react-bootstrap": "^1.0.1",
     "react-bootstrap-typeahead": "^5.0.0-rc.3",
+    "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
     "react-native-autocomplete-input": "^4.2.0",
     "react-router-dom": "^5.2.0",

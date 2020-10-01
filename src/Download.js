@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Spinner } from 'react-bootstrap';
 
 class Download extends React.Component{
 
@@ -12,7 +13,8 @@ class Download extends React.Component{
 		this.title=new URLSearchParams(window.location.search).get("title")
 		this.type=new URLSearchParams(window.location.search).get("type")
 		this._download= this._download.bind(this);
-		//this.state= {downloadProgress: 0};
+		this.state= {isLoading: true};
+		this.cancelToken = axios.CancelToken;
 		//TO DO: add video size, quality, and duration
 	}
 
@@ -40,7 +42,7 @@ class Download extends React.Component{
 		axios({
 			url: url,
 			method: 'GET',
-			responseType: 'blob',
+			responseType: 'blob'
 			// onDownloadProgress(progressEvent) {
 			// 	let progress = Math.round(progressEvent.loaded /100);
 			// 	ref.setState({downloadProgress: Math.floor(progress/size*10000)})
@@ -54,6 +56,7 @@ class Download extends React.Component{
 			link.setAttribute('download', title);
 			link.setAttribute('target', '_blank'); 
 			link.click();
+			ref.setState({isLoading: false})
 		}).catch(err => console.log(err));
 	}
 
@@ -67,9 +70,21 @@ class Download extends React.Component{
 					{/* <div className="row mt-3 mx-1 progress mb-4 w-50 mx-auto"  style={{ height: "25px"}} >
 						<div  className="progress-bar progress-bar-striped progress-bar-animated text-responsive" style={{ width: this.state.downloadProgress+"%",height: "25px" }} role="progressbar" aria-valuenow={this.state.downloadProgress} aria-valuemin="0" aria-valuemax="100"></div>
 					</div> */}
-					{/*  add spinner here*/}
-					{/*  add cancel button here*/}
-					{/*  add return button here*/}
+					<div className="row justify-content-center">
+						{this.state.isLoading ? 
+							(
+								<Spinner className="mt-2 mb-4" animation="border" variant="primary"  role="status" style={{width: '4rem', height: '4rem'}} >	
+								</Spinner>
+							):
+							(<p className="text-responsive">Exctraction Complete !</p>)
+						}
+					</div>
+					<div className="row justify-content-center">
+						{this.state.isLoading ? 
+							(<button type="button" className="mt-1 btn btn-danger btn-lg">Cancel Download</button>):
+							(<button type="button" className="mt-1 btn btn-danger btn-lg">Close Page</button>)
+						}
+					</div>
 			</div>
 			)
 	}
