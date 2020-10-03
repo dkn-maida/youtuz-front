@@ -22,6 +22,7 @@ class ResItem extends React.Component{
 								<img className="img-fluid w-100 h-80" src={result.thumb} alt={result.title}></img>
 								<span className="mt-2">{result.title}</span> 
 							</div>
+							{/* ouvrir une nouvelle page uniquement sur browser  */}
 							<BrowserView>
 								<Link to={this._buildUrl(result.id, result.thumb, result.title, 'audio')}  target="_blank">
 									<button type="button" className="btnAudio mt-1 btn-lg btn-primary"><i className="fa fa-download"></i> Audio</button>

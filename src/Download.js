@@ -14,7 +14,7 @@ class Download extends React.Component{
 		this._download= this._download.bind(this);
 		this._cancelDownload=this._cancelDownload.bind(this);
 		this._closePage=this._closePage.bind(this);
-		this.state= {isLoading: true};
+		this.state= {isLoading: true, message:''};
 		this.cancelToken = axios.CancelToken.source();
 		//TO DO: add video size, quality, and duration
 	}
@@ -44,15 +44,15 @@ class Download extends React.Component{
 			link.setAttribute('download', title);
 			link.setAttribute('target', '_blank'); 
 			link.click();
-			ref.setState({isLoading: false})
+			ref.setState({isLoading: false, message: "Extraction complete"})
 		}).catch(function(thrown){
 			if(axios.isCancel(thrown)){console.log('Request is canceled', thrown.message)}
 		})
 	}
 
 	_cancelDownload(){
-		this.cancelToken.cancel('Operation canceled by the user.');
-		this.setState({isLoading: false})
+		this.cancelToken.cancel('Download canceled by the user.');
+		this.setState({isLoading: false, message:"Download canceled"})
 	}
 
 	_closePage(){
@@ -73,7 +73,7 @@ class Download extends React.Component{
 								<Spinner className="mt-2 mb-4" animation="border" variant="primary"  role="status" style={{width: '4rem', height: '4rem'}} >	
 								</Spinner>
 							):
-							(<p className="text-responsive">Exctraction Complete !</p>)
+							(<p className="text-responsive">{this.state.message}</p>)
 						}
 					</div>
 					<div className="row justify-content-center">
