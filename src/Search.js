@@ -56,7 +56,6 @@ class Search extends React.Component{
 		.then(data => {
 			console.log(data)
 			ref.setState({results: data})
-			console.log(ref)
 			ref.setState({isSearchLoading: false})
 		})
 		.catch(err => console.log(err))

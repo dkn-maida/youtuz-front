@@ -7,14 +7,15 @@ class Download extends React.Component{
 	constructor(props){
 		super(props)
 		this.url_dl='http://localhost:4000/download'
-		//this.url_dl_size='http://localhost:4000/downloadSize'
 		this.videoId=new URLSearchParams(window.location.search).get("videoId")
 		this.thumb=new URLSearchParams(window.location.search).get("thumb")
 		this.title=new URLSearchParams(window.location.search).get("title")
 		this.type=new URLSearchParams(window.location.search).get("type")
 		this._download= this._download.bind(this);
+		this._cancelDownload=this._cancelDownload.bind(this);
+		this._closePage=this._closePage.bind(this);
 		this.state= {isLoading: true};
-		this.cancelToken = axios.CancelToken;
+		this.cancelToken = axios.CancelToken.source();
 		//TO DO: add video size, quality, and duration
 	}
 
@@ -24,30 +25,17 @@ class Download extends React.Component{
 	}
 
 	_download(id, type, title){ 
-		var url=this.url_dl+'?type='+type+'&videoId='+id+'&title='+title
-		var url_size=this.url_dl_size+'?videoId='+id
 
+		var url=this.url_dl+'?type='+type+'&videoId='+id+'&title='+title
 		console.log("trying to fetch " + url)
 		var ref=this
 		var size=0
 
 		axios({
-			url: url_size,
-			method: 'GET'
-		  }).then((response) => {
-			size=response.data
-			console.log("Size=" + size)
-		}).catch(err => console.log(err));
-
-		axios({
 			url: url,
 			method: 'GET',
-			responseType: 'blob'
-			// onDownloadProgress(progressEvent) {
-			// 	let progress = Math.round(progressEvent.loaded /100);
-			// 	ref.setState({downloadProgress: Math.floor(progress/size*10000)})
-			// 	console.log(ref.state.downloadProgress)
-            // }
+			responseType: 'blob',
+			cancelToken: this.cancelToken.token
 		  }).then((response) => {
 			title=(type === 'video')?title+'.mp4':title+'.mp3'
 			let urlfake = window.URL.createObjectURL(new File([response.data], title));
@@ -57,7 +45,19 @@ class Download extends React.Component{
 			link.setAttribute('target', '_blank'); 
 			link.click();
 			ref.setState({isLoading: false})
-		}).catch(err => console.log(err));
+		}).catch(function(thrown){
+			if(axios.isCancel(thrown)){console.log('Request is canceled', thrown.message)}
+		})
+	}
+
+	_cancelDownload(){
+		this.cancelToken.cancel('Operation canceled by the user.');
+		this.setState({isLoading: false})
+	}
+
+	_closePage(){
+		window.open('your current page URL', '_self', '');
+		window.close();
 	}
 
 	render(){
@@ -67,9 +67,6 @@ class Download extends React.Component{
 					<div className="row justify-content-center mt-4 mb-4">
 						<img src={this.thumb} alt={this.title} className="mx-auto w-30 h-30" />
 					</div>
-					{/* <div className="row mt-3 mx-1 progress mb-4 w-50 mx-auto"  style={{ height: "25px"}} >
-						<div  className="progress-bar progress-bar-striped progress-bar-animated text-responsive" style={{ width: this.state.downloadProgress+"%",height: "25px" }} role="progressbar" aria-valuenow={this.state.downloadProgress} aria-valuemin="0" aria-valuemax="100"></div>
-					</div> */}
 					<div className="row justify-content-center">
 						{this.state.isLoading ? 
 							(
@@ -81,8 +78,8 @@ class Download extends React.Component{
 					</div>
 					<div className="row justify-content-center">
 						{this.state.isLoading ? 
-							(<button type="button" className="mt-1 btn btn-danger btn-lg">Cancel Download</button>):
-							(<button type="button" className="mt-1 btn btn-danger btn-lg">Close Page</button>)
+							(<button type="button" className="mt-1 btn btn-danger btn-lg" onClick={this._cancelDownload}>Cancel Download</button>):
+							(<button type="button" className="mt-1 btn btn-danger btn-lg" onClick={this._closePage}>Close Page</button>)
 						}
 					</div>
 			</div>
