@@ -1,0 +1,167 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Stack Tableau for Ec2. See https://github.com/dkn-maida/youtuz-api"
+
+Parameters:
+
+  DisplayName:
+    Description: "Project name"
+    Type: String
+    Default: "youtuz-api"
+    
+  baseAMI:
+    Description: "Base AMI dedicated to Tableau from ami-07d9160fa81ccffb5 / amzn2-ami-hvm-2.0.20200722.0-x86_64-gp2"
+    Type: AWS::EC2::Image::Id
+    Default: "ami-01dd7e419af12d9e6"
+    ConstraintDescription: "Must be a valid AMI ID."
+
+  Environment:
+    Description: Environment
+    Type: String
+    Default: "dev"
+    AllowedValues:
+      - "dev"
+ 
+  Ec2Type:
+    Description: "EC2 instance type."
+    Type: String
+    Default: "t2.micro"
+    AllowedValues:
+      - "t2.micro"
+    ConstraintDescription: "Must be a valid EC2 instance type."
+  
+  TagApp:
+    Description: "Application Tag."
+    Type: String
+    Default: "youtuz"
+    AllowedValues:
+      - "youtuz"
+
+  TagComp:
+    Description: "Comp Tag."
+    Type: String
+    Default: "api"
+    AllowedValues:
+      - "api"
+
+Mappings:
+  EnvironmentMap:
+    dev:
+      SecurityGroupSSH: "sg-608e7b19"
+      VPC: "vpc-bc5badd7"
+      SubnetId: "subnet-14c8bf4f,subnet-26e3c852,subnet-1043b57b"
+      AZIdForInstances: "eu-west-1a,eu-west-1b,eu-west-1c"
+      KeyName: "aws_key_dev"
+      DesiredCapacity: 1
+      SubNetwork: 22
+      SecurityGroupRegionalEdge: "sg-0eef282648480fef5"
+      SecurityGroupGlobalEdge: "sg-0b230a7a65e889d3e"
+      SubnetDMZId: "subnet-268fca7d,subnet-d64d75b1,subnet-67fceb0c"
+      ExternalDomainName: "dev-youtuz.net."
+      ExternalRecord: "dev-youtuz.net"
+
+Resources:
+
+  SecurityGroupForInstances:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${DisplayName}-instances-${Environment}"
+      GroupDescription: "Security group dedicated to youtuz-api"
+      VpcId: !FindInMap [EnvironmentMap, !Ref Environment, VPC]
+
+      Tags:
+        - Key: "Name"
+          Value: !Sub "sg-${DisplayName}-${Environment}"
+        - Key: "App"
+          Value: !Ref TagApp
+        - Key: "Comp"
+          Value: !Ref TagComp
+        - Key: "Env"
+          Value: !Ref Environment
+
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: 
+            Fn::ImportValue:
+              !Sub "youtuz-external-alb-sg-${Environment}"
+          Description: "Allow traffic from external Load Balancer."
+  
+
+  AutoScalingLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      LaunchConfigurationName: !Sub "${DisplayName}-lc-${Environment}"
+      ImageId: !Ref "baseAMI"
+      InstanceType: !Ref "Ec2Type"
+      KeyName: !FindInMap [EnvironmentMap, !Ref Environment, KeyName]
+      SecurityGroups:
+        - !Ref "SecurityGroupForInstances"
+        - !FindInMap [EnvironmentMap, !Ref Environment, SecurityGroupSSH]
+      UserData: !Base64
+        Fn::Join:
+          - ""
+          - - "#!/bin/bash\n"
+            - "#/usr/bin/su - ec2-user -c '/bin/bash /home/ec2-user/userdata.sh > /home/ec2-user/userdata.log 2>&1 &'"
+
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Sub "${DisplayName}-asg-${Environment}"
+      LaunchConfigurationName: !Ref "AutoScalingLaunchConfig"
+      AvailabilityZones: !Split [",", !FindInMap [EnvironmentMap, !Ref Environment, AZIdForInstances]]
+      VPCZoneIdentifier: !Split [",", !FindInMap [EnvironmentMap, !Ref Environment, SubnetId]]
+      DesiredCapacity: !FindInMap [EnvironmentMap, !Ref Environment, DesiredCapacity]
+      MinSize: !FindInMap [EnvironmentMap, !Ref Environment, DesiredCapacity]
+      MaxSize: !FindInMap [EnvironmentMap, !Ref Environment, DesiredCapacity]
+      HealthCheckGracePeriod: 86400
+      TargetGroupARNs:
+        - !Ref ALBInternalTargetGroup
+      Tags:
+        - Key: "Name"
+          Value: !Sub "${DisplayName}-${Environment}"
+          PropagateAtLaunch: true
+        - Key: "Env"
+          Value: !Ref Environment
+          PropagateAtLaunch: true
+        - Key: "Comp"
+          Value: !Ref TagComp
+          PropagateAtLaunch: true
+        - Key: "App"
+          Value: !Ref TagApp
+          PropagateAtLaunch: true
+    
+      
+          
+# #############################################################################
+
+  #ALBInternal:
+  #TODO
+
+  ALBInternelTargetGroup:
+    Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
+    Properties:
+      VpcId: !FindInMap [EnvironmentMap, !Ref Environment, VPC]
+      Name: !Sub "${DisplayName}-alb-e-tg-${Environment}"
+      Port: 80
+      Protocol: HTTP
+      TargetType: instance
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "60"
+      Matcher:
+        HttpCode: "200-399"
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckPort: "80"
+      HealthCheckProtocol: HTTP
+      HealthyThresholdCount: 2
+      Tags:
+        - Key: App
+          Value: !Ref TagApp
+        - Key: Comp
+          Value: !Ref TagComp
+        - Key: Env
+          Value: !Ref Environment
