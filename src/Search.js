@@ -9,7 +9,7 @@ class Search extends React.Component{
 
 	constructor(props){
 		super(props)
-		this.url_search='http://localhost:4000/search'
+		this.url_search='https://api.youtuz.net/search'
 		this.state={
 			results: [],
 			suggestions: [],
