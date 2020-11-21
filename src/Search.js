@@ -51,14 +51,15 @@ class Search extends React.Component{
 		var search_url=this.url_search +'?query='+input
 		var ref=this
 		ref.setState({isSearchLoading: true}) 
-		fetch(search_url)
-		.then(response => response.json())
+		let myHeaders=new Headers({'x-api-key': '47918559-aec6-4461-b4a5-f26ca910b13e'}); 
+		fetch(search_url, {method: 'GET', headers: myHeaders, mode: 'cors'})
+		.then(response => response.json()) 
 		.then(data => {
 			console.log(data)
 			ref.setState({results: data})
 			ref.setState({isSearchLoading: false})
 		})
-		.catch(err => console.log(err))
+		.catch(err => console.log(err), ref.setState({isSearchLoading: false}))
 	}
  
 	render(){
