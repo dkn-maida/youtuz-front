@@ -187,15 +187,13 @@ Resources:
       Matcher:
         HttpCode: "200"
       HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckPort: "3000"
+      HealthCheckPath: /healthcheck
+      HealthCheckPort: "4000"
       HealthCheckProtocol: HTTP
       HealthyThresholdCount: 2
       Tags:
         - Key: App
           Value: !Ref TagApp
-        - Key: Comp
-          Value: !Ref TagComp
         - Key: Env
           Value: !Ref Environment
 
@@ -204,8 +202,8 @@ Resources:
     Properties:
       DomainName: youtuz.net
       DomainValidationOptions:
-            - DomainName: youtuz.net
-              ValidationDomain: youtuz.net
+        - DomainName: youtuz.net
+          ValidationDomain: youtuz.net
 
   ALBExternalListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
