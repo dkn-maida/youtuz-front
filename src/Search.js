@@ -9,7 +9,7 @@ class Search extends React.Component{
 
 	constructor(props){
 		super(props)
-		this.url_search='https://api.youtuz.net/search'
+		this.url_search='http://localhost:4000/search'
 		this.state={
 			results: [],
 			suggestions: [],
@@ -51,15 +51,14 @@ class Search extends React.Component{
 		var search_url=this.url_search +'?query='+input
 		var ref=this
 		ref.setState({isSearchLoading: true}) 
-		let myHeaders=new Headers({'x-api-key': '47918559-aec6-4461-b4a5-f26ca910b13e'}); 
-		fetch(search_url, {method: 'GET', headers: myHeaders, mode: 'cors', crossDomain: true})
-		.then(response => response.json()) 
+		fetch(search_url)
+		.then(response => response.json())
 		.then(data => {
 			console.log(data)
 			ref.setState({results: data})
 			ref.setState({isSearchLoading: false})
 		})
-		.catch(err => console.log(err), ref.setState({isSearchLoading: false}))
+		.catch(err => console.log(err))
 	}
  
 	render(){

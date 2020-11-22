@@ -6,7 +6,7 @@ class Download extends React.Component{
 
 	constructor(props){
 		super(props)
-		this.url_dl='https://api.youtuz.net/download'
+		this.url_dl='http://localhost:4000/download'
 		this.videoId=new URLSearchParams(window.location.search).get("videoId")
 		this.thumb=new URLSearchParams(window.location.search).get("thumb")
 		this.title=new URLSearchParams(window.location.search).get("title")
