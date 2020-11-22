@@ -52,7 +52,7 @@ class Search extends React.Component{
 		var ref=this
 		ref.setState({isSearchLoading: true}) 
 		let myHeaders=new Headers({'x-api-key': '47918559-aec6-4461-b4a5-f26ca910b13e'}); 
-		fetch(search_url, {method: 'GET', headers: myHeaders, mode: 'cors'})
+		fetch(search_url, {method: 'GET', headers: myHeaders, mode: 'cors', crossDomain: true})
 		.then(response => response.json()) 
 		.then(data => {
 			console.log(data)
