@@ -70,7 +70,7 @@ class Search extends React.Component{
 							<h1 className="text-center mb-3 lead text-responsive font-weight-bold">Type Keywords to search for a video or paste a youtube url</h1> 
 						</div>
 						<AsyncTypeahead  id="search_id" ref={this.aheadRef} onSearch={this._autoComplete} options={this.state.suggestions} minLength={1} 
-						 isLoading={this.state.isLoading}  size="large"/>
+						 isLoading={this.state.isLoading}  size="sm"/>
 						<button type="button" className="tbn btn-primary btn-block mt-1 btn-lg text-responsive" onClick={this._search}>Search</button>
 		       		</div>
 				</div>

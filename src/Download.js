@@ -56,7 +56,6 @@ class Download extends React.Component{
 	}
 
 	_closePage(){
-		window.open('your current page URL', '_self', '');
 		window.close();
 	}
 
