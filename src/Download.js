@@ -6,7 +6,7 @@ class Download extends React.Component{
 
 	constructor(props){
 		super(props)
-		this.url_dl='http://youtuz.net:4000/download'
+		this.url_dl='http://youtuz.net:4000/download' 
 		this.videoId=new URLSearchParams(window.location.search).get("videoId")
 		this.thumb=new URLSearchParams(window.location.search).get("thumb")
 		this.title=new URLSearchParams(window.location.search).get("title")
@@ -14,7 +14,7 @@ class Download extends React.Component{
 		this._download= this._download.bind(this);
 		this._cancelDownload=this._cancelDownload.bind(this);
 		this._closePage=this._closePage.bind(this);
-		this.state= {isLoading: true, message:''};
+		this.state= {isLoading: true, message:'Extraction from youtube in progress please wait...'};
 		this.cancelToken = axios.CancelToken.source();
 		//TO DO: add video size, quality, and duration
 	}
@@ -63,17 +63,21 @@ class Download extends React.Component{
 	render(){
 			return(
 			<div className="container-fluid">
-					<h3 className="row justify-content-center text-responsive">{this.title}</h3>
+					<h3 className="row justify-content-center text-responsive text-center mb-3 lead font-weight-bold">{this.title}</h3>
 					<div className="row justify-content-center mt-4 mb-4">
-						<img src={this.thumb} alt={this.title} className="mx-auto w-30 h-30" />
+						<div className="col-sm-4"></div>
+						<div className="col-sm-4"><img src={this.thumb} alt={this.title} className="img-fluid w-100 h-80"/></div>
+						<div className="col-sm-4"></div>
+					</div>
+					<div className="row justify-content-center">
+						<p className="text-responsive font-weight-bold  text-center">{this.state.message}</p>
 					</div>
 					<div className="row justify-content-center">
 						{this.state.isLoading ? 
-							(
-								<Spinner className="mt-2 mb-4" animation="border" variant="primary"  role="status" style={{width: '4rem', height: '4rem'}} >	
-								</Spinner>
+							( 
+								<Spinner className="mt-2 mb-4" animation="border" variant="primary"  role="status" style={{width: '4rem', height: '4rem'}}></Spinner>
 							):
-							(<p className="text-responsive">{this.state.message}</p>)
+							(<div></div>)
 						}
 					</div>
 					<div className="row justify-content-center">
