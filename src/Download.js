@@ -49,7 +49,9 @@ class Download extends React.Component{
 			ref.setState({isLoading: false, message: "Extraction complete"})
 		}).catch(function(thrown){
 			if(axios.isCancel(thrown)){console.log('Request is canceled', thrown.message)}
-		})
+		}).catch((err) => {
+			console.log(err)
+		});
 	}
 
 	_cancelDownload(){
