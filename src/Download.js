@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { Spinner } from 'react-bootstrap';
+import {BrowserView,MobileView} from "react-device-detect";
+import { Link } from 'react-router-dom';
 
 class Download extends React.Component{
 
@@ -13,7 +15,7 @@ class Download extends React.Component{
 		this.type=new URLSearchParams(window.location.search).get("type")
 		this._download= this._download.bind(this);
 		this._cancelDownload=this._cancelDownload.bind(this);
-		this._closePage=this._closePage.bind(this);
+		this._closePageBrowser=this._closePageBrowser.bind(this);
 		this.state= {isLoading: true, message:'Extraction from youtube in progress please wait...'};
 		this.cancelToken = axios.CancelToken.source();
 		//TO DO: add video size, quality, and duration
@@ -55,8 +57,8 @@ class Download extends React.Component{
 		this.setState({isLoading: false, message:"Download canceled"})
 	}
 
-	_closePage(){
-		window.close();
+	_closePageBrowser(){
+		window.open('', '_self').close();
 	}
 
 	render(){
@@ -79,12 +81,23 @@ class Download extends React.Component{
 							(<div></div>)
 						}
 					</div>
-					<div className="row justify-content-center">
-						{this.state.isLoading ? 
-							(<button type="button" className="mt-1 btn btn-danger btn-lg" onClick={this._cancelDownload}>Cancel Download</button>):
-							(<button type="button" className="mt-1 btn btn-danger btn-lg" onClick={this._closePage}>Close Page</button>)
-						}
-					</div>
+					<BrowserView>
+						<div className="row justify-content-center">
+							{this.state.isLoading ? 
+								(<button type="button" className="mt-1 btn btn-danger btn-lg" onClick={this._cancelDownload}>Cancel Download</button>):
+								(<button type="button" className="mt-1 btn btn-danger btn-lg" onClick={this._closePageBrowser}>Close Page</button>)
+							}
+						</div>
+					</BrowserView>
+					<MobileView>
+						<div className="row justify-content-center">
+							{this.state.isLoading ? 
+								(<button type="button" className="mt-1 btn btn-danger btn-lg" onClick={this._cancelDownload}>Cancel Download</button>):
+								(<Link to='/'><button type="button" className="mt-1 btn btn-danger btn-lg">Close</button></Link>)
+							}
+						</div>
+					</MobileView>
+					
 			</div>
 			)
 	}
